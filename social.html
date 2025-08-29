@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share | StreetFoodMY</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .social-card {
+            transition: transform 0.3s;
+            cursor: pointer;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .social-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        .social-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .facebook-card {
+            background: linear-gradient(135deg, #3b5998, #4c70ba);
+            color: white;
+        }
+        .instagram-card {
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            color: white;
+        }
+        .twitter-card {
+            background: linear-gradient(135deg, #1da1f2, #0d8ecf);
+            color: white;
+        }
+        .post-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .post-image-preview {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #ff6b35 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">StreetFoodMY</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="food.html">Food Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="vendor.html">Vendors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="map.html">Food Map</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="social.html">Share</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <h1 class="text-center mb-5">Share Your Favorite Street Food</h1>
+        
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card social-card facebook-card h-100 p-4" onclick="shareOnFacebook()">
+                    <div class="social-icon">
+                        <i class="fab fa-facebook"></i>
+                    </div>
+                    <h3>Facebook</h3>
+                    <p>Share your food discoveries with friends on Facebook</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card social-card instagram-card h-100 p-4" onclick="shareOnInstagram()">
+                    <div class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <h3>Instagram</h3>
+                    <p>Post mouth-watering food pics on Instagram</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card social-card twitter-card h-100 p-4" onclick="shareOnTwitter()">
+                    <div class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <h3>Twitter</h3>
+                    <p>Tweet about your street food adventures</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-5 post-card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Create a Food Post</h2>
+                <form id="postForm">
+                    <div class="mb-3">
+                        <label for="food-name" class="form-label">Food Name</label>
+                        <input type="text" class="form-control" id="food-name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="food-desc" class="form-label">Description</label>
+                        <textarea class="form-control" id="food-desc" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="food-image" class="form-label">Upload Image</label>
+                        <input class="form-control" type="file" id="food-image" accept="image/*">
+                        <div class="mt-2" id="imagePreviewContainer" style="display: none;">
+                            <img id="imagePreview" class="post-image-preview rounded">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="createPost()">Create Post</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <h2 class="mb-4">Your Recent Posts</h2>
+            <div class="row" id="userPosts">
+                <!-- User posts will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5>StreetFoodMY</h5>
+                    <p>Discover the authentic flavors of Malaysia's vibrant street food culture.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white">Home</a></li>
+                        <li><a href="food.html" class="text-white">Food Gallery</a></li>
+                        <li><a href="vendor.html" class="text-white">Vendors</a></li>
+                        <li><a href="map.html" class="text-white">Food Map</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Connect</h5>
+                    <a href="social.html" class="text-white me-2"><i class="fab fa-facebook fa-2x"></i></a>
+                    <a href="social.html" class="text-white me-2"><i class="fab fa-instagram fa-2x"></i></a>
+                    <a href="social.html" class="text-white me-2"><i class="fab fa-twitter fa-2x"></i></a>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 StreetFoodMY. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Image preview
+        document.getElementById('food-image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    document.getElementById('imagePreviewContainer').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent("Check out this amazing Malaysian street food I found on StreetFoodMY!");
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+        }
+
+        function shareOnInstagram() {
+            alert('For Instagram, please use the mobile app to share from your gallery. We\'ve saved your post!');
+            // In a real app, this would use the Instagram API
+        }
+
+        function shareOnTwitter() {
+            const text = encodeURIComponent("Loving these Malaysian street food finds on @StreetFoodMY!");
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        }
+
+        function createPost() {
+            const foodName = document.getElementById('food-name').value;
+            const foodDesc = document.getElementById('food-desc').value;
+            const foodImage = document.getElementById('food-image').files[0];
+            
+            if (!foodName || !foodDesc) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const post = {
+                name: foodName,
+                description: foodDesc,
+                image: foodImage ? URL.createObjectURL(foodImage) : 'default-food.jpg',
+                timestamp: new Date().toISOString()
+            };
+            
+            // Save to localStorage
+            let posts = JSON.parse(localStorage.getItem('foodPosts')) || [];
+            posts.unshift(post); // Add new post at beginning
+            localStorage.setItem('foodPosts', JSON.stringify(posts));
+            
+            // Clear form
+            document.getElementById('postForm').reset();
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+            
+            // Show success message
+            alert('Post created successfully! Ready to share.');
+            
+            // Refresh posts display
+            loadUserPosts();
+        }
+
+        function loadUserPosts() {
+            const posts = JSON.parse(localStorage.getItem('foodPosts')) || [];
+            const postsContainer = document.getElementById('userPosts');
+            
+            postsContainer.innerHTML = '';
+            
+            if (posts.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-camera fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">You haven't created any posts yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            posts.forEach(post => {
+                const postDate = new Date(post.timestamp);
+                const postElement = document.createElement('div');
+                postElement.className = 'col-md-6 mb-4';
+                postElement.innerHTML = `
+                    <div class="card h-100">
+                        <img src="${post.image}" class="card-img-top post-image-preview" alt="${post.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${post.name}</h5>
+                            <p class="card-text">${post.description}</p>
+                            <small class="text-muted">Posted on ${postDate.toLocaleDateString()} at ${postDate.toLocaleTimeString()}</small>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <button class="btn btn-sm btn-outline-primary me-2" onclick="sharePost('${encodeURIComponent(post.name)}', '${encodeURIComponent(post.description)}', '${post.image}')">
+                                <i class="fas fa-share-alt me-1"></i>Share
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deletePost('${post.timestamp}')">
+                                <i class="fas fa-trash-alt me-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+                postsContainer.appendChild(postElement);
+            });
+        }
+
+        function sharePost(name, description, image) {
+            // In a real app, this would share the specific post
+            alert(`Sharing post about ${decodeURIComponent(name)}!`);
+        }
+
+        function deletePost(timestamp) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                let posts = JSON.parse(localStorage.getItem('foodPosts')) || [];
+                posts = posts.filter(post => post.timestamp !== timestamp);
+                localStorage.setItem('foodPosts', JSON.stringify(posts));
+                loadUserPosts();
+            }
+        }
+
+        // Load user posts when page loads
+        document.addEventListener('DOMContentLoaded', loadUserPosts);
+
+        // Check login status and update user display
+        const loggedIn = localStorage.getItem('loggedIn');
+        const user = JSON.parse(localStorage.getItem('user'));
+        
+        if (loggedIn === 'true' && user) {
+            document.querySelector('a[href="login.html"]').innerHTML = `<i class="fas fa-user"></i> ${user.name.split(' ')[0]}`;
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelector('.cart-count').textContent = totalItems;
+        }
+
+        // Initialize cart count
+        updateCartCount();
+    </script>
+</body>
+</html>
